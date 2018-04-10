@@ -1,73 +1,71 @@
 import json
 import math
 
+
 def load_data(filepath):
 	with open(filepath, encoding='utf-8', newline='') as f:
 	    return json.load(f)
 
-
 def get_biggest_bar(data):
-    a = []
+    size = []
     name = []
-    ii = 0
+    index = 0
     for d in data["features"]:
-    	a.append(d["properties"]["Attributes"]["SeatsCount"])
+    	size.append(d["properties"]["Attributes"]["SeatsCount"])
     	name.append(d["properties"]["Attributes"]["Name"])
 
     for d in data["features"]:
-    	if (a[ii] == max(a)):
+    	if size[index] == max(size):
     		break
     	else:
-    	    ii+=1
+    	    index += 1
 
-    return name[ii]
+    return name[index]
 
 def get_smallest_bar(data):
-    a = []
+    size = []
     name = []
-    ii = 0
+    index = 0
     for d in data["features"]:
-    	a.append(d["properties"]["Attributes"]["SeatsCount"])
+    	size.append(d["properties"]["Attributes"]["SeatsCount"])
     	name.append(d["properties"]["Attributes"]["Name"])
 
     for d in data["features"]:
-    	if (a[ii] == min(a)):
+    	if size[index] == min(size):
     		break
     	else:
-    	    ii+=1
+    	    index += 1
 
-    return name[ii]
+    return name[index]
 
 def get_closest_bar(data, longitude, latitude):
-    a = [] #массив данных
-    b = [] #массив расстояний до нуля исходных данных
-    c = [] #массив для сравнения
+    coordinates = [] #массив данных
+    distance = [] #массив расстояний до нуля исходных данных
+    comparison = [] #массив для сравнения
     name = [] #массив названий
-    m = 2 #количество координат
-    ii = 0
+    size_of_coordinates = 2 #количество координат
+    index = 0
 
-    x = float(input("введите координатy x: "))
-    y = float(input("введите координатy y: "))
-
-    z = math.sqrt(pow(x, 2) + pow(y, 2)) #растояние до нуля введенных данных
+    z = math.sqrt(pow(longitude, 2) + pow(latitude, 2)) #растояние до нуля введенных данных
 
     for i in data["features"]:
-    	a.append([])
-    	for j in range(m):
-    		a[ii].append(i["geometry"]["coordinates"][j])
-    	b.append(math.sqrt(pow(a[ii][0], 2) + pow(a[ii][1], 2)))
-    	c.append(b[ii] - z)
+    	coordinates.append([])
+    	for j in range(size_of_coordinates):
+    		coordinates[index].append(i["geometry"]["coordinates"][j])
+    	distance.append(math.sqrt(pow(coordinates[index][0], 2) + pow(coordinates[index][1], 2)))
+    	comparison.append(math.fabs((distance[index] - z)))
     	name.append(i["properties"]["Attributes"]["Name"])
-    	ii+=1
+    	index += 1
 
-    ii = 0 
+    index = 0 
 
     for i in data["features"]:
-    	if (c[ii] == min(c)):
+    	if comparison[index] == min(comparison):
     		break
     	else:
-    	    ii+=1
-    return name[ii]
+    	    index += 1
+
+    return name[index]
 
 if __name__ == '__main__':
     pass
