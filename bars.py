@@ -11,11 +11,11 @@ def get_biggest_bar(data_bars):
     size = []
     name_bar = []
     index = 0
-    for features in data["features"]:
+    for features in data_bars["features"]:
         size.append(features["properties"]["Attributes"]["SeatsCount"])
         name_bar.append(features["properties"]["Attributes"]["Name"])
 
-    for features in data["features"]:
+    for features in data_bars["features"]:
         if size[index] == max(size):
             break
         else:
@@ -24,15 +24,15 @@ def get_biggest_bar(data_bars):
     return name_bar[index]
 
 
-def get_smallest_bar(data/-bars):
+def get_smallest_bar(data_bars):
     size = []
     name_bar = []
     index = 0
-    for features in data["features"]:
+    for features in data_bars["features"]:
         size.append(features["properties"]["Attributes"]["SeatsCount"])
         name_bar.append(features["properties"]["Attributes"]["Name"])
 
-    for features in data["features"]:
+    for features in data_bars["features"]:
         if size[index] == min(size):
             break
         else:
@@ -51,7 +51,7 @@ def get_closest_bar(data_bars, longitude, latitude):
 
     our_comparison = math.sqrt(pow(longitude, 2) + pow(latitude, 2))
 
-    for features in data["features"]:
+    for features in data_bars["features"]:
         coordinates.append([])
         for dex in range(size_of_coordinates):
             coordinates[index].append(features["geometry"]["coordinates"][dex])
@@ -63,7 +63,7 @@ def get_closest_bar(data_bars, longitude, latitude):
 
     index = 0
 
-    for features in data["features"]:
+    for features in data_bars["features"]:
         if comparison[index] == min(comparison):
             break
         else:
