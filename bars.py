@@ -7,7 +7,7 @@ def load_data(filepath):
         return json.load(f)
 
 
-def get_biggest_bar(data):
+def get_biggest_bar(data_bars):
     size = []
     name_bar = []
     index = 0
@@ -24,7 +24,7 @@ def get_biggest_bar(data):
     return name_bar[index]
 
 
-def get_smallest_bar(data):
+def get_smallest_bar(data/-bars):
     size = []
     name_bar = []
     index = 0
@@ -41,7 +41,7 @@ def get_smallest_bar(data):
     return name_bar[index]
 
 
-def get_closest_bar(data, longitude, latitude):
+def get_closest_bar(data_bars, longitude, latitude):
     coordinates = []
     distance = []
     comparison = []
