@@ -1,10 +1,6 @@
 import bars
 
-print(bars.get_biggest_bar(bars.load_data("bars_library.json")))
-
-print(bars.get_smallest_bar(bars.load_data("bars_library.json")))
-
-longi = float(input("введите координатy x: "))
-lati = float(input("введите координатy y: "))
-
-print(bars.get_closest_bar(bars.load_data("bars_library.json"), longi, lati))
+if __name__ == "__main__":
+    print(bars.get_biggest_bar(bars.load_data()))
+    print(bars.get_smallest_bar(bars.load_data()))
+    print(bars.get_closest_bar(bars.load_data(), bars.get_bar_coordinate(), bars.get_bar_coordinate()))
