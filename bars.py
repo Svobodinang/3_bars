@@ -7,8 +7,8 @@ def load_data(filepath):
         return json.load(bars)
 
 
-def output_json(data):
-    print(json.dumps(data, sort_keys=True, ensure_ascii=False, indent=4))
+def output_json(data_bars):
+    print(json.dumps(data_bars, sort_keys=True, ensure_ascii=False, indent=4))
 
 
 def get_biggest_bar(data_bars):
