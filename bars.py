@@ -3,8 +3,12 @@ import math
 
 
 def load_data(filepath):
-    with open(filepath, encoding="utf-8", newline="") as f:
-        return json.load(f)
+    with open(filepath, encoding="utf-8", newline="") as bars:
+        return json.load(bars)
+
+
+def output_json(data):
+    print(json.dumps(data, sort_keys=True, ensure_ascii=False, indent=4))
 
 
 def get_biggest_bar(data_bars):
@@ -12,8 +16,8 @@ def get_biggest_bar(data_bars):
 
     max_bar = max(
         bars, key=lambda x: x["properties"]["Attributes"]["SeatsCount"])
-
-    return max_bar
+    
+    output_json(max_bar)
 
 
 def get_smallest_bar(data_bars):
@@ -22,33 +26,42 @@ def get_smallest_bar(data_bars):
     min_bar = min(
         bars, key=lambda x: x["properties"]["Attributes"]["SeatsCount"])
 
-    return min_bar
+    output_json(min_bar)
 
 
-def get_bar_coordinate():
+def get_user_coordinate():
     try:
         coordinate = float(input("введите координатy: "))
-    except ValueError:
-        print("Это не число!")
+    except Exception:
+        print("ЭТО ИСКЛЮЧЕНИЕ: ВЫ ВВЕЛИ НЕ ЧИСЛО!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     return coordinate
 
 
-def formula(x, y, compared_value):
+def search_distance_from_user_to_bar(x, y, compared_value):
     return math.sqrt(pow(x, 2) + pow(y, 2)) - compared_value
 
 
 def get_closest_bar(data_bars, longitude, latitude):
-    our_bar_distance_to_zero = math.sqrt(pow(longitude, 2) + pow(latitude, 2))
+    our_distance_to_zero = math.sqrt(pow(longitude, 2) + pow(latitude, 2))
 
     bars = data_bars["features"]
 
     closest_bar = min(
-        bars, key=lambda x: formula(
+        bars, key=lambda x: search_distance_from_user_to_bar(
             x["geometry"]["coordinates"][0],
-            x["geometry"]["coordinates"][1], our_bar_distance_to_zero))
+            x["geometry"]["coordinates"][1], 
+            our_distance_to_zero))
 
-    return closest_bar
+    output_json(closest_bar)
 
 
 if __name__ == "__main__":
-    pass
+	filepath = input("введите путь к файлу: ")
+	filepath
+	data = load_data(filepath)
+	print("САМЫЙ БОЛЬШОЙ БАР:")
+	get_biggest_bar(data)
+	print("САМЫЙ МАЛЕНЬКИЙ БАР: ")
+	get_smallest_bar(data)
+	print("БЛИЖАЙШИЙ БАР:")
+	get_closest_bar(data, get_user_coordinate(), get_user_coordinate())
