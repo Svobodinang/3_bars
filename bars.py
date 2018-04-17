@@ -1,44 +1,27 @@
 import json
 import math
-import requests
 
 
-def load_data(filepath = requests.get("https://devman.org/media/filer_public/95/74/957441dc-78df-4c99-83b2-e93dfd13c2fa/bars.json")):
-    return filepath.json()
+def load_data(filepath):
+    with open(filepath, encoding="utf-8", newline="") as f:
+    	return json.load(f)
 
 
 def get_biggest_bar(data_bars):
-    bar_size = []
-    bar_id = []
-    index = 0
-    for all_bars in data_bars["features"]:
-        bar_size.append(all_bars["properties"]["Attributes"]["SeatsCount"])
-        bar_id.append(all_bars["properties"]["RowId"])
+    bars = data_bars["features"]
 
-    for all_bars in data_bars["features"]:
-        if bar_size[index] == max(bar_size):
-            break
-        else:
-            index += 1
+    max_bar = max(bars, key=lambda x: x["properties"]["Attributes"]["SeatsCount"])
 
-    return bar_id[index]
+    return max_bar
 
 
 def get_smallest_bar(data_bars):
-    bar_size = []
-    bar_id = []
-    index = 0
-    for all_bars in data_bars["features"]:
-        bar_size.append(all_bars["properties"]["Attributes"]["SeatsCount"])
-        bar_id.append(all_bars["properties"]["RowId"])
+    bars = data_bars["features"]
 
-    for all_bars in data_bars["features"]:
-        if bar_size[index] == min(bar_size):
-            break
-        else:
-            index += 1
+    min_bar = min(bars, key=lambda x: x["properties"]["Attributes"]["SeatsCount"])
 
-    return bar_id[index]
+    return min_bar
+
 
 def get_bar_coordinate():
     try:
@@ -47,36 +30,18 @@ def get_bar_coordinate():
         print("Это не число!")
     return coordinate
 
+def formula(x, y, z):
+    return math.sqrt(pow(x, 2) + pow(y, 2)) - z
 
 def get_closest_bar(data_bars, longitude, latitude):
-    bar_coordinates = []
-    bar_distance_to_zero = []
-    bars_comparison = []
-    bar_id = []
-    size_of_coordinates = 2
-    index = 0
-
     our_bar_distance_to_zero = math.sqrt(pow(longitude, 2) + pow(latitude, 2))
 
-    for all_bars in data_bars["features"]:
-        bar_coordinates.append([])
-        for dex in range(size_of_coordinates):
-            bar_coordinates[index].append(all_bars["geometry"]["coordinates"][dex])
-        bar_distance_to_zero.append(math.sqrt(pow(bar_coordinates[index][0], 2) + pow(
-            bar_coordinates[index][1], 2)))
-        bars_comparison.append(bar_distance_to_zero[index] - our_bar_distance_to_zero)
-        bar_id.append(all_bars["properties"]["RowId"])
-        index += 1
+    bars = data_bars["features"]
 
-    index = 0
+    closest_bar = min(bars, key=lambda x: 
+        formula(x["geometry"]["coordinates"][0], x["geometry"]["coordinates"][1], our_bar_distance_to_zero))
 
-    for all_bars in data_bars["features"]:
-        if bars_comparison[index] == min(bars_comparison, key=abs):
-            break
-        else:
-            index += 1
-
-    return bar_id[index]
+    return closest_bar
 
 
 if __name__ == "__main__":
