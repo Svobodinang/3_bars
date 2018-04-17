@@ -14,7 +14,7 @@
 
 ```bash
 
-$ python script.py # possibly requires call of python3 executive instead of just python
+$ python bars.py # possibly requires call of python3 executive instead of just python
 
 Пример ответа скрипта: 
 

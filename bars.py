@@ -16,7 +16,6 @@ def get_biggest_bar(data_bars):
 
     max_bar = max(
         bars, key=lambda x: x["properties"]["Attributes"]["SeatsCount"])
-    
     output_json(max_bar)
 
 
@@ -32,7 +31,7 @@ def get_smallest_bar(data_bars):
 def get_user_coordinate():
     try:
         coordinate = float(input("введите координатy: "))
-    except Exception:
+    except ValueError:
         print("ЭТО ИСКЛЮЧЕНИЕ: ВЫ ВВЕЛИ НЕ ЧИСЛО!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     return coordinate
 
@@ -49,19 +48,19 @@ def get_closest_bar(data_bars, longitude, latitude):
     closest_bar = min(
         bars, key=lambda x: search_distance_from_user_to_bar(
             x["geometry"]["coordinates"][0],
-            x["geometry"]["coordinates"][1], 
+            x["geometry"]["coordinates"][1],
             our_distance_to_zero))
 
     output_json(closest_bar)
 
 
 if __name__ == "__main__":
-	filepath = input("введите путь к файлу: ")
-	filepath
-	data = load_data(filepath)
-	print("САМЫЙ БОЛЬШОЙ БАР:")
-	get_biggest_bar(data)
-	print("САМЫЙ МАЛЕНЬКИЙ БАР: ")
-	get_smallest_bar(data)
-	print("БЛИЖАЙШИЙ БАР:")
-	get_closest_bar(data, get_user_coordinate(), get_user_coordinate())
+    filepath = input("введите путь к файлу: ")
+    filepath
+    data_bars = load_data(filepath)
+    print("САМЫЙ БОЛЬШОЙ БАР:")
+    get_biggest_bar(data_bars)
+    print("САМЫЙ МАЛЕНЬКИЙ БАР: ")
+    get_smallest_bar(data_bars)
+    print("БЛИЖАЙШИЙ БАР:")
+    get_closest_bar(data_bars, get_user_coordinate(), get_user_coordinate())
