@@ -66,19 +66,21 @@ def input_json_path():
             return file_json
         else:
             print("Данный файл имеет расширение не .json")
-            exit(0)
+            return 0
     else:
         print("Такого файла не существует")
-        exit(0)
+        return 0
 
 
 if __name__ == "__main__":
-    data_bars = load_data(input_json_path())
-    print("САМЫЙ БОЛЬШОЙ БАР:")
-    output_json(get_biggest_bar(data_bars))
-    print("САМЫЙ МАЛЕНЬКИЙ БАР: ")
-    output_json(get_smallest_bar(data_bars))
-    print("БЛИЖАЙШИЙ БАР:")
-    output_json(get_closest_bar(data_bars,
+    input_path = input_json_path()
+    if input_path!=0:
+        data_bars = load_data(input_path)
+        print("САМЫЙ БОЛЬШОЙ БАР:")
+        output_json(get_biggest_bar(data_bars))
+        print("САМЫЙ МАЛЕНЬКИЙ БАР: ")
+        output_json(get_smallest_bar(data_bars))
+        print("БЛИЖАЙШИЙ БАР:")
+        output_json(get_closest_bar(data_bars,
                                 get_user_coordinate(),
                                 get_user_coordinate()))
