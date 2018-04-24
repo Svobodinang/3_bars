@@ -55,21 +55,23 @@ def get_closest_bar(bars, longitude, latitude):
     return closest_bar
 
 
-def check_path_file(path):
-    if os.path.isfile(path):
-        return "ok"
-    else:
+def check_json_file(path):
+    if not os.path.isfile(path):
+        print("Такого файла не сущесвтует")
         return None
+    elif load_data(sys.argv[1]) is None:
+        exit("В файле не json тект")
+        return
+    else:
+        return "ok"
 
 
 if __name__ == "__main__":
-
     if len(sys.argv) < 2:
         exit("Вы не ввели путь к файлу с данными")
-    if check_path_file(sys.argv[1]) is None:
-        exit("Такого файла не существует")
-    if load_data(sys.argv[1]) is None:
-        exit("В файле не json тект")
+
+    if check_json_file(sys.argv[1]) is None:
+        exit()
 
     data_bars = load_data(sys.argv[1])
     output_name_bar("Самый большой бар: ", get_biggest_bar(data_bars))
