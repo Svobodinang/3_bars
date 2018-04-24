@@ -54,6 +54,7 @@ def get_closest_bar(bars, longitude, latitude):
 
     return id, closest_bar
 
+
 def check_json_file():
     try:
         load_data(sys.argv[1])
@@ -69,17 +70,13 @@ def check_json_file():
         return None
 
 
-
-
 if __name__ == "__main__":
-
-    if check_json_file()==None:
-        exit(0)
-    data_bars = load_data(sys.argv[1])
-    output_name_bar(get_biggest_bar(data_bars))
-    output_name_bar(get_smallest_bar(data_bars))
-    x = get_user_coordinate()
-    if x!=None:
-        y = get_user_coordinate()
-        if y!=None:
-            output_name_bar(get_closest_bar(data_bars, x, y))
+    if check_json_file() is not None:
+        data_bars = load_data(sys.argv[1])
+        output_name_bar(get_biggest_bar(data_bars))
+        output_name_bar(get_smallest_bar(data_bars))
+        x = get_user_coordinate()
+        if x is not None:
+            y = get_user_coordinate()
+            if y is not None:
+                output_name_bar(get_closest_bar(data_bars, x, y))
