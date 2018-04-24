@@ -1,32 +1,33 @@
 import json
 import math
 import sys
+import os
 
 
 def load_data(filepath):
-    with open(filepath, encoding="utf-8") as data_bar:
-        data_bars = json.load(data_bar)
-    bars = data_bars["features"]
-    return bars
+    try:
+        with open(filepath, encoding="utf-8") as bars:
+            object_bars = json.load(bars)
+        object_bars_features = object_bars["features"]
+        return object_bars_features
+    except json.decoder.JSONDecodeError:
+        return None
 
 
-def output_name_bar(find_property_bar):
-    id, bars = find_property_bar
-    print(id, bars["properties"]["Attributes"]["Name"])
+def output_name_bar(property_bar, bar):
+    print(property_bar, bar["properties"]["Attributes"]["Name"])
 
 
 def get_biggest_bar(bars):
-    id = "Самый БОЛЬШОЙ бар: "
     max_bar = max(
         bars, key=lambda x: x["properties"]["Attributes"]["SeatsCount"])
-    return id, max_bar
+    return max_bar
 
 
 def get_smallest_bar(bars):
-    id = "Самый МАЛЕНЬКИЙ бар: "
     min_bar = min(
         bars, key=lambda x: x["properties"]["Attributes"]["SeatsCount"])
-    return id, min_bar
+    return min_bar
 
 
 def get_user_coordinate():
@@ -43,7 +44,6 @@ def search_distance_from_user_to_bar(x, y, compared_value):
 
 
 def get_closest_bar(bars, longitude, latitude):
-    id = "БЛИЖАЙШИЙ бар: "
     our_distance_to_zero = math.sqrt(pow(longitude, 2) + pow(latitude, 2))
 
     closest_bar = min(
@@ -52,31 +52,36 @@ def get_closest_bar(bars, longitude, latitude):
             x["geometry"]["coordinates"][1],
             our_distance_to_zero))
 
-    return id, closest_bar
+    return closest_bar
 
 
-def check_json_file():
-    try:
-        load_data(sys.argv[1])
+def check_path_file(path):
+    if os.path.isfile(path):
         return "ok"
-    except json.decoder.JSONDecodeError:
-        print("В файле не json текст")
-        return None
-    except IndexError:
-        print("Вы не указали путь к файлу")
-        return None
-    except FileNotFoundError:
-        print("Такого файла не существует")
+    else:
         return None
 
 
 if __name__ == "__main__":
-    if check_json_file() is not None:
-        data_bars = load_data(sys.argv[1])
-        output_name_bar(get_biggest_bar(data_bars))
-        output_name_bar(get_smallest_bar(data_bars))
-        x = get_user_coordinate()
-        if x is not None:
-            y = get_user_coordinate()
-            if y is not None:
-                output_name_bar(get_closest_bar(data_bars, x, y))
+
+    if len(sys.argv) < 2:
+        exit("Вы не ввели путь к файлу с данными")
+    if check_path_file(sys.argv[1]) is None:
+        exit("Такого файла не существует")
+    if load_data(sys.argv[1]) is None:
+        exit("В файле не json тект")
+
+    data_bars = load_data(sys.argv[1])
+    output_name_bar("Самый большой бар: ", get_biggest_bar(data_bars))
+    output_name_bar("Самый маленький бар: ", get_smallest_bar(data_bars))
+    longitude = get_user_coordinate()
+    if longitude is None:
+        exit()
+    latitude = get_user_coordinate()
+    if latitude is None:
+        exit()
+    output_name_bar("Ближайший бар: ", get_closest_bar(
+        data_bars,
+        longitude,
+        latitude
+    ))
