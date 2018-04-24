@@ -60,7 +60,7 @@ def check_json_file(path):
         print("Такого файла не сущесвтует")
         return None
     elif load_data(sys.argv[1]) is None:
-        exit("В файле не json тект")
+        print("В файле не json тект")
         return
     else:
         return "ok"
