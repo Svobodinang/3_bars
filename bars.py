@@ -6,10 +6,10 @@ import os
 
 def load_data(filepath):
     try:
-        with open(filepath, encoding="utf-8") as bars:
-            object_bars = json.load(bars)
-        object_bars_features = object_bars["features"]
-        return object_bars_features
+        with open(filepath, encoding="utf-8") as json_file:
+            decoded_json_file = json.load(json_file)
+        bars = decoded_json_file["features"]
+        return bars
     except json.decoder.JSONDecodeError:
         return None
 
@@ -35,7 +35,6 @@ def get_user_coordinate():
         coordinate = float(input("введите координатy: "))
         return coordinate
     except ValueError:
-        print("ВЫ ВВЕЛИ НЕ ЧИСЛО! Повторите попытку выполнение программы")
         return None
 
 
@@ -55,33 +54,23 @@ def get_closest_bar(bars, longitude, latitude):
     return closest_bar
 
 
-def check_json_file(path):
-    if not os.path.isfile(path):
-        print("Такого файла не сущесвтует")
-        return None
-    elif load_data(sys.argv[1]) is None:
-        print("В файле не json тект")
-        return
-    else:
-        return "ok"
-
-
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         exit("Вы не ввели путь к файлу с данными")
-
-    if check_json_file(sys.argv[1]) is None:
-        exit()
+    elif not os.path.isfile(sys.argv[1]):
+        exit("Такого файла не существует")
 
     data_bars = load_data(sys.argv[1])
+    if data_bars is None:
+        exit("В файле не json текст")
+
     output_name_bar("Самый большой бар: ", get_biggest_bar(data_bars))
     output_name_bar("Самый маленький бар: ", get_smallest_bar(data_bars))
     longitude = get_user_coordinate()
-    if longitude is None:
-        exit()
     latitude = get_user_coordinate()
-    if latitude is None:
-        exit()
+    if (longitude is None) or (latitude is None):
+        exit("Введенные координаты содержат не только цифры! Повторите ввод")
+
     output_name_bar("Ближайший бар: ", get_closest_bar(
         data_bars,
         longitude,
